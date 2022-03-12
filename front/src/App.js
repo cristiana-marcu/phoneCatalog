@@ -1,7 +1,6 @@
 import './App.css';
 import React, { Component } from 'react';
 
-import Form from './components/Form';
 import Phones from './components/Phones';
 
 class App extends Component {
@@ -16,38 +15,36 @@ class App extends Component {
 	 * We don't need to to this anymore
 	 */
 	state = {
-		phones: []
+		phones: [],
+		loading: false
 	}
 
-	getPhone = async (e) => { //To use this method I have to pass it as props to the component who needs it
+	getPhone = async (e) => {
 		const phoneName = e.target.elements.phoneName.value;
 		e.preventDefault();
-		console.log(phoneName); //To see this on the console we have to prefent default beahviour of the page, which is refreshing
 
 		const api_call = await fetch('http://localhost:8080/phones');
 
-		const data = await api_call.json();
-		this.setState({ phones: data.phones})
+		const data = api_call.json();
+		console.log(data);
+		this.setState({ phones: data});
 	}
 
-	componentDidUpdate = () => {
-		const json = localStorage.getItem("phones");
-		const phones = JSON.parse(json);
-		this.setState({ phones });
-	}
-
-	componentDidMount = () => {
-		const phones = JSON.stringify(this.state.phones);
-		localStorage.setItem("phones", phones);
+	componentDidMount() {
+		this.setState({ loading: true });
+		fetch('http://localhost:8080/phones')
+		.then(response => response.json())
+		.then(data => this.setState({ phones: data, loading: false }));
 	}
 
 	render() {
+		console.log(this.state.phones);
+		console.log(this.state.loading);
 		return (
 			<div className="App">
 				<header className="App-header">
 					<h1 className="App-title">Phone Catalog</h1>
 				</header>
-				<Form getPhone={this.getPhone} />
 				<Phones phones={this.state.phones} />
 			</div>
 		);

@@ -19,3 +19,6 @@ front/.vscode/
 
 front/build/
 front/node_modules/
+.idea/workspace.xml
+.idea/sonarlint/issuestore/index.pb
+.idea/sonarlint/issuestore/8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
